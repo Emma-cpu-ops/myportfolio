@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ] # Se déclenche quand tu fais un "git push" sur la branche main
+
+permissions:
+  pages: write          # Donne la permission de déployer sur Pages
+  id-token: write       # Résout l'erreur du "ID Token" manquant[citation:9]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.' # Upload tout le contenu du projet (ou le dossier 'dist' si tu as un site compilé)
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
